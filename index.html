@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SelectReplacement exemple</title>
+    <script type="module" src="example.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <h1>Select replacement exemple</h1>
+        <section>
+            <h2>Simple select replacement</h2>
+            <div class="input-container">
+                <label for="testSelect">Simple select test</label>
+                <div class="select-replacement">
+                    <select name="testSelect" id="testSelect">
+                        <option value="1">test1</option>
+                        <option value="2">test2</option>
+                        <option value="3">test3</option>
+                        <option value="4">test4</option>
+                        <option value="5">test5</option>
+                        <option value="6">test6</option>
+                        <option value="7">test7</option>
+                        <option value="7">test8</option>
+                    </select>
+                    <span class="select-replacement-arrow"></span>
+                    <div class="select-replacement-options">
+                        <ul class="select-replacement-options-list">
+                            <li class="select-replacement-option" data-value="1">test1</li>
+                            <li class="select-replacement-option" data-value="2">test2</li>
+                            <li class="select-replacement-option" data-value="3">test3</li>
+                            <li class="select-replacement-option" data-value="4">test4</li>
+                            <li class="select-replacement-option" data-value="5">test5</li>
+                            <li class="select-replacement-option" data-value="6">test6</li>
+                            <li class="select-replacement-option" data-value="7">test7</li>
+                            <li class="select-replacement-option" data-value="8">test8</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <h2>Select multiple replacement</h2>
+            <div class="input-container">
+                <label for="selectMultipleExemple">Exemple multiple</label>
+                <div class="select-replacement multiple">
+                    <select name="multiple" id="selectMultipleExemple" multiple>
+                        <option value="1">test1</option>
+                        <option value="2">test2</option>
+                        <option value="3">test3</option>
+                        <option value="4">test4</option>
+                        <option value="5">test5</option>
+                        <option value="6">test6</option>
+                        <option value="7">test7</option>
+                        <option value="8">test8</option>
+                    </select>
+                    <div class="select-replacement-placeholder" data-placeholder-content="Select an option"></div>
+                    <span class="select-replacement-arrow"></span>
+                    <div class="select-replacement-options">
+                        <ul class="select-replacement-options-list">
+                            <li class="select-replacement-option" data-value="1">test1</li>
+                            <li class="select-replacement-option" data-value="2">test2</li>
+                            <li class="select-replacement-option" data-value="3">test3</li>
+                            <li class="select-replacement-option" data-value="4">test4</li>
+                            <li class="select-replacement-option" data-value="5">test5</li>
+                            <li class="select-replacement-option" data-value="6">test6</li>
+                            <li class="select-replacement-option" data-value="7">test7</li>
+                            <li class="select-replacement-option" data-value="8">test8</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+<template id="selectMultipleBadgeTemplate">
+    <span class="badge">
+        <span class="badge-text"></span>
+        <button type="button" class="removeButton select-replacement-option-remover"></button>
+    </span>
+</template>
+</body>
+</html>
