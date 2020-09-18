@@ -47,6 +47,10 @@ The SelectReplacement has some parameters that can be used but it's the most of 
     * selector of the text container inside the badge
 * openClass : `string`
     * the class used when the select is open (options visible)
+* emptyClass : `string`
+    * Class used when there is no option in the select
+* noMoreOptionClass : `string`
+    * Class used when there is no more option to select (in a multiple case)
 * selectReplacementOptionHideClass : `string`
     * When in a multiple select this class is used to hide selected option in the list
 * visibleOptions : `integer`
