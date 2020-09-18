@@ -18,6 +18,8 @@ class SelectReplacement{
             badgeSelector: '.badge',
             badgeTextSelector: '.badge-text',
             openClass: 'open',
+            emptyClass: 'empty',
+            noMoreOptionsClass: 'noMore',
             selectReplacementOptionHideClass: 'hide',
             visibleOptions: 5
         };
@@ -82,17 +84,22 @@ class SelectReplacement{
                     heightToAdd = parseInt(padding);
                 }
 
+                let heightToGo;
+                let openOptions = parent.querySelector(this.params.optionsContainerSelector);
+
                 if (option !== null) {
+                    optionContainer.classList.remove(this.params.noMoreOptionsClass);
                     optionHeight = option.offsetHeight;
+                    heightToGo = visibleOptions * optionHeight + (heightToAdd*2)
+                    heightToGo += 'px';
                 }
                 else {
-                    throw new Error('No option in the select-replacement');
+                    optionContainer.classList.add(this.params.noMoreOptionsClass);
+                    openOptions.classList.add('noMore');
+                    heightToGo = 'auto';
                 }
 
-                let heightToGo = visibleOptions * optionHeight + (heightToAdd*2);
-
-                let openOptions = parent.querySelector(this.params.optionsContainerSelector);
-                openOptions.style.height = heightToGo + 'px';
+                openOptions.style.height = heightToGo;
                 document.body.addEventListener('mousedown', () => {
                     this.close(openOptions, this)
                 }, {once: true});
@@ -105,33 +112,36 @@ class SelectReplacement{
      * @param e
      */
     selectOption( e ){
-        let parent = e.target.closest(this.params.selector);
-        let select = parent.querySelector('select');
-        let optionsList = parent.querySelector(this.params.optionsListSelector);
+        if( !e.target.classList.contains(this.params.noMoreOptionsClass) &&
+            !e.target.classList.contains(this.params.optionsListSelector) ){
+            let parent = e.target.closest(this.params.selector);
+            let select = parent.querySelector('select');
+            let optionsList = parent.querySelector(this.params.optionsListSelector);
 
-        if( select.multiple ){
-            let optionIndex = this.getValueIndex(e.target);
-            let selectedOption = select.options[optionIndex];
+            if( select.multiple ){
+                let optionIndex = this.getValueIndex(e.target);
+                let selectedOption = select.options[optionIndex];
 
-            if( selectedOption.value === e.target.dataset.value ){
-                selectedOption.selected = true;
+                if( selectedOption.value === e.target.dataset.value ){
+                    selectedOption.selected = true;
 
-                let badge = this.createBadge(select.options[optionIndex], optionIndex);
-                select.nextElementSibling.appendChild(badge);
-                this.hideOption( e.target );
+                    let badge = this.createBadge(select.options[optionIndex], optionIndex);
+                    select.nextElementSibling.appendChild(badge);
+                    this.hideOption( e.target );
 
-                let visibleOptions = optionsList.querySelectorAll(this.params.optionSelector+':not(.'+this.params.selectReplacementOptionHideClass+')').length
-                if( visibleOptions === 0 ){
-                    this.close(optionsList.parentNode, this);
-                }
-                else if( visibleOptions < this.params.visibleOptions ){
-                    this.calculateHeight(optionsList);
+                    let visibleOptions = optionsList.querySelectorAll(this.params.optionSelector+':not(.'+this.params.selectReplacementOptionHideClass+')').length
+                    if( visibleOptions === 0 ){
+                        this.close(optionsList.parentNode, this);
+                    }
+                    else if( visibleOptions < this.params.visibleOptions ){
+                        this.calculateHeight(optionsList);
+                    }
                 }
             }
-        }
-        else{
-            select.value = e.target.dataset.value;
-            this.close( optionsList.parentNode, this);
+            else{
+                select.value = e.target.dataset.value;
+                this.close( optionsList.parentNode, this);
+            }
         }
     }
 
@@ -158,6 +168,7 @@ class SelectReplacement{
 
         select.options[button.value].selected = false;
         let optionsList = button.closest(this.params.selector).querySelector(this.params.optionsListSelector);
+        optionsList.classList.remove(this.params.noMoreOptionsClass);
         let placeholder = button.closest(this.params.placeholderSelector);
         button.closest(this.params.badgeSelector).remove();
 
@@ -166,7 +177,9 @@ class SelectReplacement{
         }
 
         this.showOption(optionsList.children[button.value]);
-        this.calculateHeight( optionsList );
+        if( optionsList.parentNode.clientHeight != 0 ){
+            this.calculateHeight( optionsList );
+        }
     }
 
     /**
@@ -214,10 +227,12 @@ class SelectReplacement{
         template = template === null ? document.querySelector(this.params.badgeTemplateSelector).content.cloneNode(true) : template;
 
         template.querySelector(this.params.badgeTextSelector).textContent = option.text.trim();
-        template.querySelector(this.params.optionsRemoverSelector).value = optionIndex;
 
-        template.querySelector(this.params.optionsRemoverSelector).addEventListener( 'mousedown', e => e.stopImmediatePropagation() );
-        template.querySelector(this.params.optionsRemoverSelector).addEventListener( 'click', this.removeOptionBinded );
+        let optionRemover = template.querySelector(this.params.optionsRemoverSelector);
+        optionRemover.value = optionIndex;
+        optionRemover.addEventListener( 'mousedown', e => e.stopPropagation() );
+        optionRemover.addEventListener( 'mouseup', e => e.stopPropagation() );
+        optionRemover.addEventListener( 'click', this.removeOptionBinded );
 
         return template;
     }

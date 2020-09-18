@@ -76,6 +76,18 @@
     overflow: auto;
     background-color: #E6F4FA;
 }
+.select-replacement .select-replacement-options .select-replacement-options-list.noMore::before{
+    content:attr(data-text-no-more);
+    display:block;
+    margin:0;
+    width:100%;
+    box-sizing: border-box;
+    padding:12px;
+    font-family: 'Meta Book Roman', arial, sans-serif;
+    font-size:16px;
+    opacity:.8;
+    color:darkblue;
+}
 .select-replacement .select-replacement-options .select-replacement-options-list .select-replacement-option{
     margin:0;
     width:100%;
